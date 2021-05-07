@@ -1,16 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Store from "./App/store";
-import Index from "./App/index";
 
-export default function App() {
+const Blogs = () => {
   return (
-    <Store>
-      <Index />
-    </Store>
+    <View style={styles.container}>
+      <Text>Blogs</Text>
+    </View>
   );
-}
-
+};
+export default Blogs;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
