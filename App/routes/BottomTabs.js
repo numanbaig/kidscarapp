@@ -5,8 +5,10 @@ import BlogScreen from "../screens/User/Blogs";
 import AboutScreen from "../screens/User/About";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { useTheme } from "react-native-elements";
+import BlogDetails from "../screens/User/BlogDetails";
+import { createStackNavigator } from "@react-navigation/stack";
 const Tab = createBottomTabNavigator();
-
+const Stack = createStackNavigator();
 const MyTabs = () => {
   const { theme } = useTheme();
   return (
@@ -23,7 +25,7 @@ const MyTabs = () => {
           tabBarIcon: () => <Entypo name="book" size={20} />,
         }}
         name="Blogs"
-        component={BlogScreen}
+        component={Blogs}
       />
       <Tab.Screen
         options={{
@@ -36,3 +38,17 @@ const MyTabs = () => {
   );
 };
 export default MyTabs;
+
+const Blogs = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Blogs"
+    >
+      <Stack.Screen name="Blogs" component={BlogScreen} />
+      <Stack.Screen name="BlogDetails" component={BlogDetails} />
+    </Stack.Navigator>
+  );
+};

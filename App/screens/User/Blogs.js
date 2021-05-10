@@ -1,11 +1,16 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import BlogsComponent from "../../components/User/Blogs";
+let array = [1, 2, 3, 4, 5, 6];
 
 const Blogs = () => {
   return (
-    <View style={styles.container}>
-      <Text>Blogs</Text>
-    </View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <BlogsComponent />
+        <BlogsComponent />
+      </View>
+    </ScrollView>
   );
 };
 export default Blogs;
@@ -13,7 +18,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 10,
   },
 });

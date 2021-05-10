@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./BottomTabs";
 import Header from "../components/Generic/Header";
-import Blog from "../screens/User/Blogs";
+import BlogDetails from "../screens/User/BlogDetails";
 import CustomDrawerContent from "./Drawer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -22,18 +22,19 @@ const DrawerComponent = () => {
   );
 };
 
-// const Stack = createStackNavigator();
-// const MyStack = () => {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerShown: true,
-//         header: () => <Header />,
-//       }}
-//       initialRouteName="Main"
-//     >
-//       <Stack.Screen name="Main" component={DrawerComponent} />
-//     </Stack.Navigator>
-//   );
-// };
-export default DrawerComponent;
+const Stack = createStackNavigator();
+const MyStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        // header: () => <Header />,
+      }}
+      initialRouteName="Main"
+    >
+      <Stack.Screen name="Main" component={DrawerComponent} />
+      {/* <Stack.Screen name="BlogDetails" component={DrawerComponent} /> */}
+    </Stack.Navigator>
+  );
+};
+export default MyStack;
