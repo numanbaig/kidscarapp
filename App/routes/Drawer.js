@@ -1,20 +1,21 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
-import {
-  DrawerItem,
-  DrawerContentScrollView,
-  DrawerItemList,
-} from "@react-navigation/drawer";
+import { DrawerItem, DrawerContentScrollView } from "@react-navigation/drawer";
 import {
   MaterialCommunityIcons,
   Fontisto,
   FontAwesome5,
+  AntDesign,
+  Entypo,
 } from "@expo/vector-icons";
 import Logo from "../../assets/images/logo.png";
-import { useTheme } from "react-native-elements";
+import { useTheme, Divider } from "react-native-elements";
 import { theme } from "../theme";
+import { useNavigation } from "@react-navigation/native";
+
 const DrawerContent = ({ ...props }) => {
   const { theme } = useTheme();
+  const navigation = useNavigation();
   return (
     <View style={{ flex: 1, backgroundColor: theme.Colors.primary }}>
       <DrawerContentScrollView {...props}>
@@ -49,33 +50,36 @@ const DrawerContent = ({ ...props }) => {
               </View>
             </View>
           </View>
+          <Divider style={{ backgroundColor: "#eee", marginTop: 20 }} />
           <View style={styles.drawerSection}>
             <DrawerItem
               labelStyle={{
                 color: theme.Colors.White,
               }}
               icon={({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="account-outline"
+                <FontAwesome5
+                  name="home"
                   color={theme.Colors.White}
                   size={size}
                 />
               )}
               label="Home"
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("Root");
+              }}
             />
             <DrawerItem
               labelStyle={{
                 color: theme.Colors.White,
               }}
               icon={({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="tune"
+                <AntDesign
+                  name="contacts"
                   color={theme.Colors.White}
                   size={size}
                 />
               )}
-              label="Preferences"
+              label="Contact"
               onPress={() => {}}
             />
             <DrawerItem
@@ -90,8 +94,23 @@ const DrawerContent = ({ ...props }) => {
                   size={size}
                 />
               )}
-              label="Bookmarks"
-              onPress={() => {}}
+              label="About"
+              onPress={() => {
+                navigation.navigate("About");
+              }}
+            />
+            <DrawerItem
+              labelStyle={{
+                color: theme.Colors.White,
+              }}
+              activeTintColor={"blue"}
+              icon={({ color, size }) => (
+                <Entypo name="book" color={theme.Colors.White} size={size} />
+              )}
+              label="Blogs"
+              onPress={() => {
+                navigation.navigate("Blogs");
+              }}
             />
           </View>
           {/* <View>

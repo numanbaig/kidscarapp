@@ -1,28 +1,43 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { FlatList } from "react-native";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Dimensions,
-  Picker,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import SearchComponent from "../../components/User/Search";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import Container from "../../components/User/Container";
 import { useTheme } from "react-native-elements";
 import CarsComponent from "../../components/User/Cars";
+import useFetchProducts from "../../hooks/useProducts";
+import useFetchCategories from "../../hooks/useCategories";
+import { useNavigation } from "@react-navigation/native";
+
 const Home = () => {
   const scrollComponent = useRef();
   const windowHeight = Dimensions.get("window").height;
   const [scroll, setScroll] = useState(1);
-  const [selectedValue, setSelectedValue] = useState("java");
+  const navigation = useNavigation();
+
   const { theme } = useTheme();
+  const {
+    data: products,
+    isLoading: productsLoading,
+    isError: productsError,
+  } = useFetchProducts();
+
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useFetchCategories();
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{ minHeight: windowHeight, backgroundColor: "#fff" }}>
+      <View
+        style={{
+          backgroundColor: "#fff",
+          paddingBottom: 50,
+          minHeight: windowHeight,
+        }}
+      >
         <SearchComponent />
         <View
           style={{
@@ -31,25 +46,8 @@ const Home = () => {
             paddingBottom: 20,
           }}
         >
-          <Text
-            style={{
-              fontWeight: "bold",
-              fontSize: 16,
-              textAlign: "center",
-              color: "#fff",
-            }}
-          >
-            Go Quickly to
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              position: "relative",
-              marginLeft: 10,
-              marginRight: 10,
-            }}
-          >
+          <Text style={styles.heading}>Go Quickly to</Text>
+          <View style={styles.scroll}>
             <TouchableOpacity
               onPress={() => {
                 scrollComponent.current.scrollTo({ x: -(100 * scroll) });
@@ -63,33 +61,44 @@ const Home = () => {
                 name="arrowleft"
               />
             </TouchableOpacity>
-
-            <ScrollView
-              ref={scrollComponent}
-              pagingEnabled={true}
-              horizontal={true}
-              style={{ marginRight: 10 }}
-            >
-              {categories.map((name) => (
-                <TouchableOpacity activeOpacity={0.5}>
-                  <Text
-                    style={{
-                      padding: 5,
-                      paddingRight: 10,
-                      paddingLeft: 10,
-                      backgroundColor: theme.Colors.secondary,
-                      margin: 2,
-                      borderTopRightRadius: 5,
-                      borderBottomLeftRadius: 5,
-                      borderTopLeftRadius: 5,
-                      borderBottomRightRadius: 5,
-                    }}
+            {categoriesLoading === true ? (
+              <View style={{ flex: 1 }}>
+                <Text style={{ textAlign: "center", color: "#fff" }}>
+                  Loading...
+                </Text>
+              </View>
+            ) : (
+              <ScrollView
+                ref={scrollComponent}
+                pagingEnabled={true}
+                horizontal={true}
+                style={{ marginRight: 10 }}
+              >
+                {categories.allCategories.map((item) => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("CarsCategory")}
+                    activeOpacity={0.5}
                   >
-                    {name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+                    <Text
+                      style={{
+                        padding: 5,
+                        paddingRight: 10,
+                        paddingLeft: 10,
+                        backgroundColor: theme.Colors.secondary,
+                        margin: 2,
+                        borderTopRightRadius: 5,
+                        borderBottomLeftRadius: 5,
+                        borderTopLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                      }}
+                    >
+                      {item.categoryName}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
+
             <TouchableOpacity
               onPress={() => {
                 scrollComponent.current.scrollTo({ x: scroll * 100 });
@@ -101,32 +110,49 @@ const Home = () => {
           </View>
         </View>
         <View style={styles.container}>
-          <View
-            style={{
-              display: "flex",
-              marginBottom: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.rows}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
               New Arrival Item
             </Text>
-            {/* <Text style={{ fontSize: 16, color: theme.Colors.headingDull }}>
-              Filter By
-            </Text> */}
+            <TouchableOpacity onPress={() => navigation.navigate("Cars")}>
+              <Text style={{ fontSize: 16, color: theme.Colors.headingDull }}>
+                View All
+              </Text>
+            </TouchableOpacity>
           </View>
-          <FlatList
-            horizontal={true}
-            data={[1, 2, 35]}
-            renderItem={({ item }) => <CarsComponent data={item} />}
-          />
 
-          {/* <View>
-            <Text>Cars for Kids at best price</Text>
-          </View> */}
-          {/* <Container /> */}
+          {productsLoading === true ? (
+            <View style={{ flex: 1 }}>
+              <Text>Loading...</Text>
+            </View>
+          ) : (
+            <FlatList
+              horizontal={true}
+              data={products.allProducts}
+              renderItem={({ item }) => (
+                <CarsComponent width={true} data={item} />
+              )}
+            />
+          )}
+          <View style={styles.rows}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Deal of the Day
+            </Text>
+          </View>
+
+          {productsLoading === true ? (
+            <View style={{ flex: 1 }}>
+              <Text>Loading...</Text>
+            </View>
+          ) : (
+            <FlatList
+              horizontal={true}
+              data={products.allProducts}
+              renderItem={({ item }) => (
+                <CarsComponent width={true} data={item} />
+              )}
+            />
+          )}
         </View>
       </View>
     </ScrollView>
@@ -136,25 +162,49 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
     backgroundColor: "#fff",
     padding: 10,
+    paddingRight: 20,
+    paddingLeft: 20,
+  },
+  wrapper: {},
+  rows: {
+    display: "flex",
+    marginBottom: 10,
+    paddingTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  categories: {},
+  heading: {
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+    color: "#fff",
+  },
+  scroll: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 
-const categories = [
-  "Audi",
-  "BMW",
-  "Lamborghini",
-  "Land",
-  "Rover",
-  "Mercedes",
-  "Other",
-  "Cars",
-  "Range",
-  "Rover",
-  "Rolls",
-  "Royce",
-  "RSX",
-  "SUVs",
-];
+// const categories = [
+//   "Audi",
+//   "BMW",
+//   "Lamborghini",
+//   "Land",
+//   "Rover",
+//   "Mercedes",
+//   "Other",
+//   "Cars",
+//   "Range",
+//   "Rover",
+//   "Rolls",
+//   "Royce",
+//   "RSX",
+//   "SUVs",
+// ];

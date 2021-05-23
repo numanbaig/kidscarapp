@@ -2,8 +2,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/User/Home";
 import BlogScreen from "../screens/User/Blogs";
-import AboutScreen from "../screens/User/About";
-import { FontAwesome, Entypo } from "@expo/vector-icons";
+import CarsScreen from "../screens/User/Cars";
+import { FontAwesome, Entypo, Ionicons } from "@expo/vector-icons";
 import { useTheme } from "react-native-elements";
 import BlogDetails from "../screens/User/BlogDetails";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,27 +12,38 @@ const Stack = createStackNavigator();
 const MyTabs = () => {
   const { theme } = useTheme();
   return (
-    <Tab.Navigator screenOptions={{}} initialRouteName="Home">
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: theme.Colors.primary,
+      }}
+      initialRouteName="Home"
+    >
       <Tab.Screen
         options={{
-          tabBarIcon: () => <FontAwesome name="home" size={20} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome color={color} name="home" size={20} />
+          ),
         }}
         name="Home"
         component={HomeScreen}
       />
       <Tab.Screen
         options={{
-          tabBarIcon: () => <Entypo name="book" size={20} />,
+          tabBarIcon: ({ color }) => (
+            <Entypo color={color} name="book" size={20} />
+          ),
         }}
         name="Blogs"
         component={Blogs}
       />
       <Tab.Screen
         options={{
-          tabBarIcon: () => <FontAwesome name="home" size={20} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons color={color} name="md-car-sport" size={20} />
+          ),
         }}
-        name="About"
-        component={AboutScreen}
+        name="Cars"
+        component={CarsScreen}
       />
     </Tab.Navigator>
   );

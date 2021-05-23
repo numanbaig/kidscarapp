@@ -31,7 +31,47 @@ const Header = () => {
           <AntDesign color={theme.Colors.White} name="menu-fold" size={24} />
         </TouchableOpacity>
         <Image style={{ height: 40, width: 120 }} source={Logo} />
-        <Entypo color={theme.Colors.White} name="shopping-cart" size={24} />
+        <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
+          <View
+            style={{
+              position: "relative",
+              zIndex: 5,
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            {/* <View
+              style={{
+                position: "absolute",
+                top: -5,
+                right: -10,
+                zIndex: 1000,
+                backgroundColor: theme.Colors.secondary,
+                width: 20,
+                height: 20,
+                borderRadius: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 12,
+                }}
+              >
+                10
+              </Text>
+            </View> */}
+            <Entypo
+              style={{ zIndex: 1 }}
+              color={theme.Colors.White}
+              name="shopping-cart"
+              size={24}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

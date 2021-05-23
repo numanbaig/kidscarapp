@@ -6,7 +6,7 @@ const SearchComponent = () => {
   const { theme } = useTheme();
   const [search, setSearch] = useState("");
   return (
-    <View style={{ paddingTop: 10, backgroundColor: theme.Colors.primary }}>
+    <View style={{ backgroundColor: theme.Colors.primary }}>
       <SearchBar
         containerStyle={{
           elevation: 5,
@@ -20,12 +20,7 @@ const SearchComponent = () => {
           borderTopLeftRadius: 5,
           borderBottomRightRadius: 5,
           backgroundColor: "#fff",
-          // borderWidth: 2,
           paddingLeft: 0,
-          // borderColor: "#eee",
-          // borderTopWidth: 0,
-          // borderBottomWidth: 0,
-          // paddingTop: 0,
           alignItems: "center",
         }}
         inputContainerStyle={{
@@ -35,20 +30,6 @@ const SearchComponent = () => {
           flex: 1,
           backgroundColor: "#fff",
         }}
-        // searchIcon={{
-        //   padding: 20,
-        //   paddingLeft: 0,
-        //   marginBottom: 0,
-        // }}
-        // leftIconContainerStyle={{
-        //   marginLeft: 0,
-        //   marginTop: 0,
-        //   height: "100%"
-
-        //   marginBottom: 0,
-        //   paddingBottom: 0,
-        //   backgroundColor: theme.Colors.bg,
-        // }}
         placeholder="Search Products..."
         onChangeText={(text) => setSearch(text)}
         value={search}

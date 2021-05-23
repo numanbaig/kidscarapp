@@ -1,21 +1,40 @@
 import React from "react";
 import { View, Text, ImageBackground, Dimensions } from "react-native";
-import Img1 from "../../../assets/images/img2.jpg";
 import { useTheme } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-const CarsComponent = ({ data }) => {
+import { useNavigation } from "@react-navigation/native";
+const CarsComponent = ({ data, width }) => {
   const windowWidth = Dimensions.get("window").width;
+  const navigation = useNavigation();
   const { theme } = useTheme();
+
+  let percentage = (data.productPrice / data.comparePrice) * 100;
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("CarDetails", {
+          data: data,
+        })
+      }
+      activeOpacity={width === true ? (data.sold !== 1 ? 0.8 : 1) : 0.9}
+    >
       <View
-        style={{
-          marginRight: 10,
-          width: 250,
-          height: 300,
-          borderWidth: 1,
-          borderColor: "#eee",
-        }}
+        style={
+          width
+            ? {
+                marginRight: 10,
+                width: 250,
+                height: 300,
+                borderWidth: 1,
+                borderColor: "#eee",
+              }
+            : {
+                flex: 1,
+                height: 350,
+                borderWidth: 1,
+                borderColor: "#eee",
+              }
+        }
       >
         <ImageBackground
           resizeMode={"cover"}
@@ -24,9 +43,9 @@ const CarsComponent = ({ data }) => {
 
             borderRadius: 10,
           }}
-          source={Img1}
+          source={{ uri: data.productImage }}
         >
-          {data === 1 ? (
+          {data.sold === "1" ? (
             <View
               style={{
                 flex: 1,
@@ -57,20 +76,37 @@ const CarsComponent = ({ data }) => {
               style={{
                 backgroundColor: theme.Colors.secondary,
                 width: 50,
-                //   borderBottomLeftRadius: 5,
-                //   borderBottomRightRadius: 5,
               }}
             >
-              <Text style={{ textAlign: "center" }}>42%</Text>
+              <Text style={{ textAlign: "center" }}>
+                -{parseInt(100 - percentage)}%
+              </Text>
             </View>
           )}
         </ImageBackground>
         <View style={{ padding: 10 }}>
-          <Text style={{ fontSize: 14, height: 50 }}>
-            24 v kids cars, beach buggy, dakar dune buggy, kids ride on cars,
-            licensed lexus, parental controll remote kids car, remote controll
-            cars, ride on toys, toy vehicle
-          </Text>
+          <Text style={{ fontSize: 14, height: 50 }}>{data.productName}</Text>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: theme.Colors.heading,
+                fontWeight: "bold",
+              }}
+            >
+              ${data.productPrice}
+            </Text>
+            <Text
+              style={{
+                textDecorationLine: "line-through",
+                fontSize: 16,
+                marginLeft: 20,
+                color: theme.Colors.headingDull,
+              }}
+            >
+              ${data.comparePrice}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
