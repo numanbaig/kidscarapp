@@ -1,13 +1,27 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
 import { useTheme } from "react-native-elements";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import Logo from "../../../assets/images/logo.png";
+import { Store } from "../../store/index";
+
 const Header = () => {
+  const { state, dispatch } = useContext(Store);
   const navigation = useNavigation();
+  const [cartLength, setCartLength] = useState(0);
   const { theme } = useTheme();
+  const handleCart = () => {
+    let length = 0;
+    state.cart.forEach((item) => {
+      for (let i = 0; i < item.quantity; i++) {
+        length++;
+      }
+    });
+    return length;
+  };
+
   return (
     <View
       style={{
@@ -31,39 +45,45 @@ const Header = () => {
           <AntDesign color={theme.Colors.White} name="menu-fold" size={24} />
         </TouchableOpacity>
         <Image style={{ height: 40, width: 120 }} source={Logo} />
-        <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => {
+            navigation.navigate("Cart");
+          }}
+        >
           <View
             style={{
               position: "relative",
-              zIndex: 5,
               flexDirection: "row",
               justifyContent: "flex-end",
+              overflow: "visible",
             }}
           >
-            {/* <View
-              style={{
-                position: "absolute",
-                top: -5,
-                right: -10,
-                zIndex: 1000,
-                backgroundColor: theme.Colors.secondary,
-                width: 20,
-                height: 20,
-                borderRadius: 20,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text
+            {state.cart.length !== 0 && (
+              <View
                 style={{
-                  color: "#fff",
-                  fontSize: 12,
+                  position: "absolute",
+                  right: -10,
+                  zIndex: 2000,
+                  backgroundColor: theme.Colors.secondary,
+                  width: 18,
+                  height: 18,
+                  borderRadius: 20,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                10
-              </Text>
-            </View> */}
+                <Text
+                  style={{
+                    color: "#000",
+                    fontSize: 12,
+                  }}
+                >
+                  {handleCart()}
+                </Text>
+              </View>
+            )}
             <Entypo
               style={{ zIndex: 1 }}
               color={theme.Colors.White}

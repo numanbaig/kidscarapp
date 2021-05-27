@@ -76,7 +76,11 @@ const Home = () => {
               >
                 {categories.allCategories.map((item) => (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("CarsCategory")}
+                    onPress={() =>
+                      navigation.navigate("CarsCategory", {
+                        data: item.id,
+                      })
+                    }
                     activeOpacity={0.5}
                   >
                     <Text

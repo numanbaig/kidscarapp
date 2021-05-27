@@ -12,45 +12,23 @@ import {
 import { useTheme } from "react-native-elements";
 import useFetchByCategory from "../../hooks/useFetchByCategory";
 import { AntDesign } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 
 let deviceHeight = Dimensions.get("window").height;
 const Cars = () => {
+  const route = useRoute();
   const { theme } = useTheme();
 
   const {
     data: products,
     isLoading: productsLoading,
     isError,
-  } = useFetchByCategory();
-
-  useEffect(() => {
-    console.log("products", products);
-  }, [products]);
+  } = useFetchByCategory(route.params.data);
+  console.log("resss", products);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
-        {/* <View
-          style={{
-            borderWidth: 1,
-            borderColor: "#eee",
-            borderRadius: 5,
-          }}
-        >
-          <Picker
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-            }}
-            selectedValue={filterBy}
-            mode="dropdown"
-            onValueChange={(itemValue, itemIndex) => setFilterBy(itemValue)}
-          >
-            <Picker.Item label="All" value="All" />
-            <Picker.Item label="Latest" value="Latest" />
-            <Picker.Item label="Popular" value="Popular" />
-          </Picker>
-        </View> */}
         {productsLoading === true ? (
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -59,7 +37,7 @@ const Cars = () => {
           </View>
         ) : (
           <FlatList
-            data={products.allProducts}
+            data={products.ProductsByCategory}
             renderItem={({ item }) => (
               <View style={{ marginTop: 10 }}>
                 <Products width={false} data={item} />

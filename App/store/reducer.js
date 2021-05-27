@@ -1,13 +1,11 @@
-import { TOKEN } from "./actionType";
-
+import { CART } from "./actionType";
 export const reducer = (state, action) => {
   switch (action.type) {
-    case TOKEN:
+    case CART:
       return {
         ...state,
-        token: action.payload,
+        cart: action.payload,
       };
-
     default:
       return state;
   }

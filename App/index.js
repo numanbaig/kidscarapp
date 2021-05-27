@@ -5,6 +5,7 @@ import Root from "./routes/root";
 import { ThemeProvider } from "react-native-elements";
 import { theme } from "./theme";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+
 const queryClient = new QueryClient();
 const Index = () => {
   return (

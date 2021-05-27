@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,23 +6,38 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
-  TextInput,
-  Modal,
 } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme, Button, Overlay } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import Img from "../../../assets/images/img2.jpg";
 import { useRoute } from "@react-navigation/native";
-
+import { CART } from "../../store/actionType";
+import { Store } from "../../store/index";
 const CarDetails = () => {
+  const { state, dispatch } = useContext(Store);
   const navigation = useNavigation();
   const { theme } = useTheme();
   const route = useRoute();
   const [cartVisible, setCartVisible] = useState(false);
+  const [Quantity, setQuantity] = useState(0);
   let width = Dimensions.get("window").width;
   let data = route.params.data;
+
+  console.log("dataa", data);
+  const handleAddCart = () => {
+    dispatch({
+      type: CART,
+      payload: [
+        ...state.cart,
+        {
+          id: data.id,
+          data: data,
+          quantity: Quantity,
+        },
+      ],
+    });
+  };
   return (
     <View style={{ position: "relative", backgroundColor: "#fff" }}>
       <ScrollView>
@@ -111,15 +126,25 @@ const CarDetails = () => {
         isVisible={cartVisible}
         onBackdropPress={() => setCartVisible(false)}
       >
-        <CartComponent setCartVisible={setCartVisible} />
+        <CartComponent
+          setQuantity={setQuantity}
+          Quantity={Quantity}
+          handleAddCart={handleAddCart}
+          setCartVisible={setCartVisible}
+        />
       </Overlay>
     </View>
   );
 };
 
-const CartComponent = ({ setCartVisible }) => {
+const CartComponent = ({
+  setCartVisible,
+  Quantity,
+  setQuantity,
+  handleAddCart,
+}) => {
   const { theme } = useTheme();
-  const [cartCount, setCartCount] = useState(0);
+
   return (
     <View>
       <View
@@ -133,7 +158,7 @@ const CartComponent = ({ setCartVisible }) => {
         <View style={{ flexDirection: "row" }}>
           <Button
             onPress={() => {
-              setCartCount(cartCount + 1);
+              setQuantity(Quantity + 1);
             }}
             containerStyle={{
               elevation: 0,
@@ -146,24 +171,11 @@ const CartComponent = ({ setCartVisible }) => {
             }}
             title="+"
           />
-          <Text
-            style={{
-              padding: 10,
-              paddingLeft: 20,
-              paddingRight: 20,
-              marginRight: 10,
-              marginLeft: 10,
-              borderWidth: 1,
-              borderRadius: 5,
-              borderColor: "#eee",
-            }}
-          >
-            {cartCount}
-          </Text>
+          <Text style={styles.count}>{Quantity}</Text>
           <Button
             onPress={() => {
-              if (cartCount !== 0) {
-                setCartCount(cartCount - 1);
+              if (Quantity !== 0) {
+                setQuantity(Quantity - 1);
               }
             }}
             buttonStyle={{
@@ -177,7 +189,10 @@ const CartComponent = ({ setCartVisible }) => {
         </View>
         <View style={{ paddingTop: 20 }}>
           <Button
-            onPress={() => setCartVisible(false)}
+            onPress={() => {
+              handleAddCart();
+              setCartVisible(false);
+            }}
             title="Confirm"
             buttonStyle={{
               backgroundColor: theme.Colors.secondary,
@@ -198,5 +213,15 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: "bold",
     fontSize: 18,
+  },
+  count: {
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginRight: 10,
+    marginLeft: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "#eee",
   },
 });

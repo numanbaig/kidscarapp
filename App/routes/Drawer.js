@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const DrawerContent = ({ ...props }) => {
   const { theme } = useTheme();
-  const navigation = useNavigation();
+    const navigation = useNavigation();
   return (
     <View style={{ flex: 1, backgroundColor: theme.Colors.primary }}>
       <DrawerContentScrollView {...props}>

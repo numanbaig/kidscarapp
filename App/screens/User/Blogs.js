@@ -23,7 +23,7 @@ const Blogs = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
-          {x ? (
+          {BlogsLoading ? (
             <View
               style={{
                 flex: 1,
@@ -34,10 +34,24 @@ const Blogs = () => {
               <ActivityIndicator size="large" color={theme.Colors.primary} />
             </View>
           ) : (
-            <FlatList
-              data={BlogsList}
-              renderItem={({ item }) => <BlogsComponent data={item} />}
-            />
+            <>
+              {BlogsList.length !== 0 ? (
+                <FlatList
+                  data={BlogsList}
+                  renderItem={({ item }) => <BlogsComponent data={item} />}
+                />
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>No Blogs to Display</Text>
+                </View>
+              )}
+            </>
           )}
         </View>
       </View>

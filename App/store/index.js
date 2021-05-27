@@ -1,10 +1,9 @@
 import React, { createContext, useReducer } from "react";
-import reducer from "./reducer";
-export const Store = createContext();
+import { reducer } from "./reducer";
 const initialState = {
-  token: null,
+  cart: [],
 };
-
+export const Store = createContext(initialState);
 const StoreProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (

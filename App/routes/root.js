@@ -11,6 +11,7 @@ import CarsScreen from "../screens/User/Cars";
 import CategoryScreen from "../screens/User/CarCategory";
 import BlogDetails from "../screens/User/BlogDetails";
 import CartScreen from "../screens/Cart/CartScreen";
+import PaymentDetails from "../screens/Cart/PaymentDetails";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTheme } from "react-native-elements";
 import { theme } from "../theme";
@@ -81,6 +82,21 @@ const MyStack = () => {
         }}
         name="CarsCategory"
         component={CategoryScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: theme.Colors.primary,
+          },
+          headerTitleStyle: {
+            color: theme.Colors.White,
+          },
+          headerTitle: <Text>Payment Details</Text>,
+          headerTintColor: theme.Colors.White,
+        }}
+        name="PaymentDetails"
+        component={PaymentDetails}
       />
     </Stack.Navigator>
   );

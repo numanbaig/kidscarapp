@@ -1,2 +1,1 @@
-export const NOTIFICATION = "NOTIFICATION";
-export const TOKEN = "TOKEN";
+export const CART = "CART";
