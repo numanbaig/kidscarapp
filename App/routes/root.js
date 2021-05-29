@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/User/Home";
@@ -15,9 +15,11 @@ import PaymentDetails from "../screens/Cart/PaymentDetails";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTheme } from "react-native-elements";
 import { theme } from "../theme";
+import { Store } from "../store";
 const Drawer = createDrawerNavigator();
 const DrawerComponent = () => {
   const { theme } = useTheme();
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -46,6 +48,7 @@ const DrawerComponent = () => {
 
 const Stack = createStackNavigator();
 const MyStack = () => {
+  const { state, dispatch } = useContext(Store);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -77,7 +80,7 @@ const MyStack = () => {
           headerTitleStyle: {
             color: theme.Colors.White,
           },
-          headerTitle: <Text>Cars</Text>,
+          headerTitle: <Text>{state.category}</Text>,
           headerTintColor: theme.Colors.White,
         }}
         name="CarsCategory"

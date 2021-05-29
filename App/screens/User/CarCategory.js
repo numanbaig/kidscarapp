@@ -24,7 +24,6 @@ const Cars = () => {
     isLoading: productsLoading,
     isError,
   } = useFetchByCategory(route.params.data);
-  console.log("resss", products);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -36,14 +35,29 @@ const Cars = () => {
             <ActivityIndicator size="large" color={theme.Colors.primary} />
           </View>
         ) : (
-          <FlatList
-            data={products.ProductsByCategory}
-            renderItem={({ item }) => (
-              <View style={{ marginTop: 10 }}>
-                <Products width={false} data={item} />
+          <>
+            {products.ProductsByCategory.length === 0 ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <Text>No Cars To Display</Text>
               </View>
+            ) : (
+              <FlatList
+                data={products.ProductsByCategory}
+                renderItem={({ item }) => (
+                  <View style={{ marginTop: 10 }}>
+                    <Products width={false} data={item} />
+                  </View>
+                )}
+              />
             )}
-          />
+          </>
         )}
       </View>
     </ScrollView>

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { FlatList } from "react-native";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import SearchComponent from "../../components/User/Search";
@@ -9,12 +9,14 @@ import CarsComponent from "../../components/User/Cars";
 import useFetchProducts from "../../hooks/useProducts";
 import useFetchCategories from "../../hooks/useCategories";
 import { useNavigation } from "@react-navigation/native";
-
+import { Store } from "../../store";
+import { CATEGORY } from "../../store/actionType";
 const Home = () => {
   const scrollComponent = useRef();
   const windowHeight = Dimensions.get("window").height;
   const [scroll, setScroll] = useState(1);
   const navigation = useNavigation();
+  const { state, dispatch } = useContext(Store);
 
   const { theme } = useTheme();
   const {
@@ -76,11 +78,15 @@ const Home = () => {
               >
                 {categories.allCategories.map((item) => (
                   <TouchableOpacity
-                    onPress={() =>
+                    onPress={() => {
                       navigation.navigate("CarsCategory", {
                         data: item.id,
-                      })
-                    }
+                      });
+                      dispatch({
+                        type: CATEGORY,
+                        payload: item.categoryName,
+                      });
+                    }}
                     activeOpacity={0.5}
                   >
                     <Text

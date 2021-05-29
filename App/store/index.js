@@ -2,6 +2,7 @@ import React, { createContext, useReducer } from "react";
 import { reducer } from "./reducer";
 const initialState = {
   cart: [],
+  category: "",
 };
 export const Store = createContext(initialState);
 const StoreProvider = (props) => {

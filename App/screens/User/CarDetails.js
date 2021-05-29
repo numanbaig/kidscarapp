@@ -20,11 +20,10 @@ const CarDetails = () => {
   const { theme } = useTheme();
   const route = useRoute();
   const [cartVisible, setCartVisible] = useState(false);
-  const [Quantity, setQuantity] = useState(0);
+  const [Quantity, setQuantity] = useState(1);
   let width = Dimensions.get("window").width;
   let data = route.params.data;
 
-  console.log("dataa", data);
   const handleAddCart = () => {
     dispatch({
       type: CART,
@@ -37,6 +36,25 @@ const CarDetails = () => {
         },
       ],
     });
+    // if (state.cart.length !== 0) {
+    //   let newCart = state.cart;
+    //   const check = newCart.filter((item) => data.id === item.id);
+    //   console.log("check", check);
+    // }
+    // // else{
+    // //   dispatch({
+    // //     type: CART,
+    // //     payload: [
+    // //       ...state.cart,
+    // //       {
+    // //         id: data.id,
+    // //         data: data,
+    // //         quantity: Quantity,
+    // //       },
+    // //     ],
+    // //   });
+
+    // // }
   };
   return (
     <View style={{ position: "relative", backgroundColor: "#fff" }}>
@@ -85,54 +103,60 @@ const CarDetails = () => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          width: width,
-          height: 70,
-          paddingLeft: 30,
-          paddingRight: 30,
-          position: "absolute",
-          backgroundColor: theme.Colors.primary,
-          bottom: 0,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            flex: 1,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => setCartVisible(true)}
+      {data.sold === "0" && (
+        <>
+          <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: 10,
+              width: width,
+              height: 70,
               paddingLeft: 30,
               paddingRight: 30,
-              backgroundColor: theme.Colors.secondary,
-              borderRadius: 5,
+              position: "absolute",
+              backgroundColor: theme.Colors.primary,
+              bottom: 0,
             }}
           >
-            <AntDesign color="#fff" name="shoppingcart" size={25} />
-            <Text style={{ color: "#fff", marginLeft: 10 }}>Add To Cart</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Overlay
-        overlayStyle={{}}
-        isVisible={cartVisible}
-        onBackdropPress={() => setCartVisible(false)}
-      >
-        <CartComponent
-          setQuantity={setQuantity}
-          Quantity={Quantity}
-          handleAddCart={handleAddCart}
-          setCartVisible={setCartVisible}
-        />
-      </Overlay>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                flex: 1,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setCartVisible(true)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 10,
+                  paddingLeft: 30,
+                  paddingRight: 30,
+                  backgroundColor: theme.Colors.secondary,
+                  borderRadius: 5,
+                }}
+              >
+                <AntDesign color="#fff" name="shoppingcart" size={25} />
+                <Text style={{ color: "#fff", marginLeft: 10 }}>
+                  Add To Cart
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Overlay
+            overlayStyle={{}}
+            isVisible={cartVisible}
+            onBackdropPress={() => setCartVisible(false)}
+          >
+            <CartComponent
+              setQuantity={setQuantity}
+              Quantity={Quantity}
+              handleAddCart={handleAddCart}
+              setCartVisible={setCartVisible}
+            />
+          </Overlay>
+        </>
+      )}
     </View>
   );
 };
@@ -152,8 +176,12 @@ const CartComponent = ({
           padding: 50,
         }}
       >
-        <View style={{ paddingBottom: 20 }}>
-          <Text>20 In stocks</Text>
+        <View style={{ paddingBottom: 10 }}>
+          <Text
+            style={{ fontWeight: "bold", fontSize: 16, textAlign: "center" }}
+          >
+            Quantity
+          </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Button
@@ -174,7 +202,7 @@ const CartComponent = ({
           <Text style={styles.count}>{Quantity}</Text>
           <Button
             onPress={() => {
-              if (Quantity !== 0) {
+              if (Quantity !== 1) {
                 setQuantity(Quantity - 1);
               }
             }}
@@ -187,13 +215,14 @@ const CartComponent = ({
             title="-"
           />
         </View>
+
         <View style={{ paddingTop: 20 }}>
           <Button
             onPress={() => {
               handleAddCart();
               setCartVisible(false);
             }}
-            title="Confirm"
+            title="Add To Cart"
             buttonStyle={{
               backgroundColor: theme.Colors.secondary,
             }}
