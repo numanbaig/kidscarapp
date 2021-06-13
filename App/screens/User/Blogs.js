@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,12 +13,19 @@ import FetchBlogs from "../../hooks/useFetchBlogs";
 import { useTheme } from "react-native-elements";
 let deviceHeight = Dimensions.get("window").height;
 const Blogs = () => {
+  const [listOfBlogs, setListOfBlogs] = useState([]);
   const { theme } = useTheme();
   let x = false;
-  const { data: BlogsList, isLoading: BlogsLoading, isError } = FetchBlogs();
+  const {
+    data: BlogsList,
+    isLoading: BlogsLoading,
+    isError: BlogsError,
+  } = FetchBlogs();
+
   useEffect(() => {
-    console.log("blogss", BlogsList);
+    setListOfBlogs(BlogsList);
   }, [BlogsList]);
+  console.log("BlogsError", BlogsError);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -35,12 +42,7 @@ const Blogs = () => {
             </View>
           ) : (
             <>
-              {BlogsList.length !== 0 ? (
-                <FlatList
-                  data={BlogsList}
-                  renderItem={({ item }) => <BlogsComponent data={item} />}
-                />
-              ) : (
+              {BlogsError ? (
                 <View
                   style={{
                     flex: 1,
@@ -48,8 +50,27 @@ const Blogs = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Text>No Blogs to Display</Text>
+                  <Text>Check Your Internet Connection </Text>
                 </View>
+              ) : (
+                <>
+                  {ListOfBlogs.length !== 0 ? (
+                    <FlatList
+                      data={BlogsList}
+                      renderItem={({ item }) => <BlogsComponent data={item} />}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text>No Blogs to Display</Text>
+                    </View>
+                  )}
+                </>
               )}
             </>
           )}

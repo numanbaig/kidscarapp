@@ -17,6 +17,7 @@ const Home = () => {
   const [scroll, setScroll] = useState(1);
   const navigation = useNavigation();
   const { state, dispatch } = useContext(Store);
+  const [homeProducts, setHomeProducts] = useState([]);
 
   const { theme } = useTheme();
   const {
@@ -30,6 +31,12 @@ const Home = () => {
     isLoading: categoriesLoading,
     isError: categoriesError,
   } = useFetchCategories();
+
+  useEffect(() => {
+    if (products) {
+      setHomeProducts(products.allProducts);
+    }
+  }, [products]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -70,43 +77,53 @@ const Home = () => {
                 </Text>
               </View>
             ) : (
-              <ScrollView
-                ref={scrollComponent}
-                pagingEnabled={true}
-                horizontal={true}
-                style={{ marginRight: 10 }}
-              >
-                {categories.allCategories.map((item) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("CarsCategory", {
-                        data: item.id,
-                      });
-                      dispatch({
-                        type: CATEGORY,
-                        payload: item.categoryName,
-                      });
-                    }}
-                    activeOpacity={0.5}
-                  >
-                    <Text
-                      style={{
-                        padding: 5,
-                        paddingRight: 10,
-                        paddingLeft: 10,
-                        backgroundColor: theme.Colors.secondary,
-                        margin: 2,
-                        borderTopRightRadius: 5,
-                        borderBottomLeftRadius: 5,
-                        borderTopLeftRadius: 5,
-                        borderBottomRightRadius: 5,
-                      }}
-                    >
-                      {item.categoryName}
+              <>
+                {categoriesError ? (
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ textAlign: "center", color: "#fff" }}>
+                      Check Your Internet Connection..
                     </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
+                  </View>
+                ) : (
+                  <ScrollView
+                    ref={scrollComponent}
+                    pagingEnabled={true}
+                    horizontal={true}
+                    style={{ marginRight: 10 }}
+                  >
+                    {categories.allCategories.map((item) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate("CarsCategory", {
+                            data: item.id,
+                          });
+                          dispatch({
+                            type: CATEGORY,
+                            payload: item.categoryName,
+                          });
+                        }}
+                        activeOpacity={0.5}
+                      >
+                        <Text
+                          style={{
+                            padding: 5,
+                            paddingRight: 10,
+                            paddingLeft: 10,
+                            backgroundColor: theme.Colors.secondary,
+                            margin: 2,
+                            borderTopRightRadius: 5,
+                            borderBottomLeftRadius: 5,
+                            borderTopLeftRadius: 5,
+                            borderBottomRightRadius: 5,
+                          }}
+                        >
+                          {item.categoryName}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
+              </>
             )}
 
             <TouchableOpacity
@@ -119,51 +136,65 @@ const Home = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.container}>
-          <View style={styles.rows}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              New Arrival Item
+        {categoriesError ? (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ textAlign: "center" }}>
+              Check Your Internet Connection..
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Cars")}>
-              <Text style={{ fontSize: 16, color: theme.Colors.headingDull }}>
-                View All
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.rows}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                New Arrival Item
               </Text>
-            </TouchableOpacity>
-          </View>
-
-          {productsLoading === true ? (
-            <View style={{ flex: 1 }}>
-              <Text>Loading...</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Cars")}>
+                <Text style={{ fontSize: 16, color: theme.Colors.headingDull }}>
+                  View All
+                </Text>
+              </TouchableOpacity>
             </View>
-          ) : (
-            <FlatList
-              horizontal={true}
-              data={products.allProducts}
-              renderItem={({ item }) => (
-                <CarsComponent width={true} data={item} />
-              )}
-            />
-          )}
-          <View style={styles.rows}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Deal of the Day
-            </Text>
-          </View>
 
-          {productsLoading === true ? (
-            <View style={{ flex: 1 }}>
-              <Text>Loading...</Text>
+            {productsLoading === true ? (
+              <View style={{ flex: 1 }}>
+                <Text>Loading...</Text>
+              </View>
+            ) : (
+              <>
+                <FlatList
+                  horizontal={true}
+                  data={homeProducts}
+                  renderItem={({ item }) => (
+                    <CarsComponent width={true} data={item} />
+                  )}
+                />
+              </>
+            )}
+            <View style={styles.rows}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Deal of the Day
+              </Text>
             </View>
-          ) : (
-            <FlatList
-              horizontal={true}
-              data={products.allProducts}
-              renderItem={({ item }) => (
-                <CarsComponent width={true} data={item} />
-              )}
-            />
-          )}
-        </View>
+
+            {productsLoading === true ? (
+              <View style={{ flex: 1 }}>
+                <Text>Loading...</Text>
+              </View>
+            ) : (
+              <>
+                <FlatList
+                  horizontal={true}
+                  data={homeProducts}
+                  renderItem={({ item }) => (
+                    <CarsComponent width={true} data={item} />
+                  )}
+                />
+              </>
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -201,20 +232,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-// const categories = [
-//   "Audi",
-//   "BMW",
-//   "Lamborghini",
-//   "Land",
-//   "Rover",
-//   "Mercedes",
-//   "Other",
-//   "Cars",
-//   "Range",
-//   "Rover",
-//   "Rolls",
-//   "Royce",
-//   "RSX",
-//   "SUVs",
-// ];

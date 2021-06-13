@@ -2,6 +2,7 @@
   "expo": {
     "name": "KECK",
     "slug": "KECK",
+    "scheme": "KECK",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +23,23 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFFFFF",
+        "intentFilters": [
+          {
+            "action": "VIEW",
+            "data": [
+              {
+                "scheme": "https",
+                "host": "exp",
+                "pathPrefix": "/"
+              }
+            ],
+            "category": [
+              "BROWSABLE",
+              "DEFAULT"
+            ]
+          }
+        ]
       },
       "package": "com.numansafi97.ecommerce"
     },

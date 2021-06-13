@@ -15,6 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Store } from "../../store/index";
 import SelectedComponent from "../../components/Cart/SelectedItem";
 import CartTotals from "../../components/Cart/CartTotal";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
+
 let width = Dimensions.get("window").width;
 
 const CartScreen = () => {
@@ -23,6 +25,7 @@ const CartScreen = () => {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartTotalVisible, setCartTotalVisible] = useState(false);
   const [currentSelected, setCurrentSelected] = useState([]);
+  const [checkoutVisible, setCheckoutVisible] = useState(false);
 
   const navigation = useNavigation();
   const { theme } = useTheme();
@@ -126,6 +129,7 @@ const CartScreen = () => {
                 onBackdropPress={() => setCartTotalVisible(false)}
               >
                 <CartTotals
+                  cartTotalAmount={cartTotalAmount}
                   setSelected={setSelected}
                   selected={selected}
                   deliveryTypes={deliveryTypes}
@@ -152,7 +156,25 @@ const CartScreen = () => {
                 flex: 1,
               }}
             >
-              <Text style={{ color: "#fff" }}>Total: {cartTotalAmount()}$</Text>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                onPress={() => setCartTotalVisible(true)}
+              >
+                <FontAwesome
+                  name="sort-amount-asc"
+                  style={{
+                    color: "#fff",
+                    fontSize: 20,
+                    marginRight: 10,
+                  }}
+                />
+                <Text style={{ color: "#fff" }}>
+                  Total: {cartTotalAmount()}$
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate("PaymentDetails")}
                 style={{

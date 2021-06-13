@@ -16,6 +16,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTheme } from "react-native-elements";
 import { theme } from "../theme";
 import { Store } from "../store";
+import SucessScreen from "../screens/Cart/SucessScreen";
 const Drawer = createDrawerNavigator();
 const DrawerComponent = () => {
   const { theme } = useTheme();
@@ -95,11 +96,18 @@ const MyStack = () => {
           headerTitleStyle: {
             color: theme.Colors.White,
           },
-          headerTitle: <Text>Payment Details</Text>,
+          headerTitle: <Text>Billing Details</Text>,
           headerTintColor: theme.Colors.White,
         }}
         name="PaymentDetails"
         component={PaymentDetails}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="SucessScreen"
+        component={SucessScreen}
       />
     </Stack.Navigator>
   );
